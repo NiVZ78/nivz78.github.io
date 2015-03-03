@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html manifest="manifest.appcache">
+<head>
+	<title>Casio LA-201 Settings</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/bootstrap-theme.min.css" rel="stylesheet">
+
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	
+	<script type="text/javascript" src="https://blockchain.info/Resources/wallet/pay-now-button.js"></script>
+
+</head>
+<body>
+    <div class="container">
+
+			<h2>Casio LA-201 Settings</h2>
+      
+      <form id="configure-form" class="form-configure well" action="#" method="POST">
+        <h4>Invert Colours</h4>
+        <p><small>Choose 'Yes' for White or 'No' for Black.</small></p>
+        <div class="btn-group" data-toggle="buttons">
+          <label class="btn btn-primary">
+            <input type="radio" name="invert" id="invert1" value="1"> Yes
+          </label>
+          <label class="btn btn-primary">
+            <input type="radio" name="invert" id="invert2" value="0"> No
+          </label>
+        </div>
+        <hr />
+        <h4>3D / Hollow Font</h4>
+        <p><small>Choose 'Yes' to use 3D / Hollow font or 'No' to use solid font.</small></p>
+        <div class="btn-group" data-toggle="buttons">
+          <label class="btn btn-primary">
+            <input type="radio" name="hollowfont" id="hollowfont1" value="1"> Yes
+          </label>
+          <label class="btn btn-primary">
+            <input type="radio" name="hollowfont" id="hollowfont2" value="0"> No
+          </label>
+        </div>
+        <hr />
+        <h4>Hide Branding</h4>
+        <p><small>Choose 'Yes' to hide the Pebble logo or 'No' to show it.</small></p>
+        <div class="btn-group" data-toggle="buttons">
+          <label class="btn btn-primary">
+            <input type="radio" name="branding" id="branding1" value="1"> Yes
+          </label>
+          <label class="btn btn-primary">
+            <input type="radio" name="branding" id="branding2" value="0"> No
+          </label>
+        </div>
+        <hr />
+        <div class="clearfix">
+          <input class="btn btn-lg btn-primary btn-block" id="save" type="submit" value="Save"/>
+        </div>
+      </form>
+	  </div>
+
+    <div class="footer container">
+    	<p>Casio LA-201 by <a href="http://twitter.com/NiVZ">NiVZ</a></p>
+    </div>
+    
+    <script>
+          
+      // Something like this to get query variables.
+      function getQueryParam(variable, default_) {
+          var query = location.search.substring(1);
+          var vars = query.split('&');
+          for (var i = 0; i < vars.length; i++) {
+              var pair = vars[i].split('=');
+              if (pair[0] == variable)
+                  return decodeURIComponent(pair[1]);
+          }
+          return default_ || false;
+      }    
+
+      var mInvert;
+      var mHollowfont;
+      var mBranding;
+      
+      $().ready(function () {
+
+        mInvert = parseInt(localStorage.getItem("invert"));
+	mHollowfont = parseInt(localStorage.getItem("hollowfont"));
+        mBranding = parseInt(localStorage.getItem("branding"));
+		
+
+        if(isNaN(mInvert)) {
+          mInvert = 0;
+        }
+	if(isNaN(mHollowfont)) {
+          mHollowfont = 1;
+        }
+        if(isNaN(mBranding)) {
+          mBranding = 0;
+        }          
+        
+        
+        if(mInvert) {
+          $('#invert1').prop('checked', true);
+          $('#invert1').parent().addClass('active');
+          
+          $('#invert2').prop('checked', false);
+          $('#invert2').parent().removeClass('active');
+        } 
+        else {
+          $('#invert1').prop('checked', false);
+          $('#invert1').parent().removeClass('active');
+          
+          $('#invert2').prop('checked', true);
+          $('#invert2').parent().addClass('active'); 
+        }
+        
+
+        if(mHollowfont) {
+          $('#hollowfont1').prop('checked', true);
+          $('#hollowfont1').parent().addClass('active');
+          
+          $('#hollowfont2').prop('checked', false);
+          $('#hollowfont2').parent().removeClass('active');
+        } 
+        else {
+          $('#hollowfont1').prop('checked', false);
+          $('#hollowfont1').parent().removeClass('active');
+          
+          $('#hollowfont2').prop('checked', true);
+          $('#hollowfont2').parent().addClass('active'); 
+        }
+
+        		
+        if(mBranding) {
+          $('#branding1').prop('checked', true);
+          $('#branding1').parent().addClass('active');
+          
+          $('#branding2').prop('checked', false);
+          $('#branding2').parent().removeClass('active');
+        } 
+        else {
+          $('#branding1').prop('checked', false);
+          $('#branding1').parent().removeClass('active');
+          
+          $('#branding2').prop('checked', true);
+          $('#branding2').parent().addClass('active'); 
+        }	
+		
+      });
+
+      $("#configure-form").submit(function(e) {  
+
+        mInvert = $('#invert1').prop('checked') ? 1 : 0;
+	mHollowfont = $('#hollowfont1').prop('checked') ? 1 : 0;
+        mBranding = $('#branding_mask1').prop('checked') ? 1 : 0;
+
+        localStorage.setItem("invert", mInvert); 
+	localStorage.setItem("hollowfont", mHollowfont); 
+        localStorage.setItem("branding", mBranding); 
+        
+        var j = {
+          invert : parseInt(mInvert),
+	  hollowfont : parseInt(mHollowfont),
+          branding: parseInt(mBranding)
+        };
+        
+        var return_to = getQueryParam('return_to', 'pebblejs://close#');
+        document.location = return_to + JSON.stringify(j);
+
+        //window.location.href = "pebblejs://close#" + JSON.stringify(j);
+
+        e.preventDefault();
+      });
+  </script>
+</body>
+</html>
