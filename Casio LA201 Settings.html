@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html manifest="manifest.appcache">
 <head>
-	<title>Casio LA-201 Settings</title>
+	<title>Hollow3D Settings</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	
-	<link href="css/bootstrap.min.css" rel="stylesheet">
-	<link href="css/bootstrap-theme.min.css" rel="stylesheet">
-
-	<script type="text/javascript" src="js/jquery.min.js"></script>
-	<script type="text/javascript" src="js/bootstrap.min.js"></script>
-
 </head>
 <body>
     <div class="container">
 
-			<h2>Casio LA-201 Settings</h2>
+	<h2>Hollow3D Settings</h2>
       
-      <form id="configure-form" class="form-configure well" action="#" method="POST">
+      	<form id="configure-form" class="form-configure well" action="#" method="POST">
+        <h4>Hollow3D Font</h4>
+        <p><small>Choose 'Yes' to use the Hollow3D font or 'No' to use solid font.</small></p>
+        <div class="btn-group" data-toggle="buttons">
+          <label class="btn btn-primary">
+            <input type="radio" name="hollowfont" id="hollowfont1" value="1"> Yes
+          </label>
+          <label class="btn btn-primary">
+            <input type="radio" name="hollowfont" id="hollowfont2" value="0"> No
+          </label>
+        </div>
+        <hr />
         <h4>Invert Colours</h4>
         <p><small>Choose 'Yes' for White or 'No' for Black.</small></p>
         <div class="btn-group" data-toggle="buttons">
@@ -28,14 +32,14 @@
           </label>
         </div>
         <hr />
-        <h4>3D / Hollow Font</h4>
-        <p><small>Choose 'Yes' to use 3D / Hollow font or 'No' to use solid font.</small></p>
+        <h4>UK Date Format</h4>
+        <p><small>Choose 'Yes' to use DD-MM or 'No' to use MM-DD.</small></p>
         <div class="btn-group" data-toggle="buttons">
           <label class="btn btn-primary">
-            <input type="radio" name="hollowfont" id="hollowfont1" value="1"> Yes
+            <input type="radio" name="ukdate" id="ukdate1" value="1"> Yes
           </label>
           <label class="btn btn-primary">
-            <input type="radio" name="hollowfont" id="hollowfont2" value="0"> No
+            <input type="radio" name="ukdate" id="ukdate2" value="0"> No
           </label>
         </div>
         <hr />
@@ -57,7 +61,7 @@
 	  </div>
 
     <div class="footer container">
-    	<p>Casio LA-201 by <a href="http://twitter.com/NiVZ">NiVZ</a></p>
+    	<p>Hollow3D by <a href="http://twitter.com/NiVZ">NiVZ</a></p>
     </div>
     
     <script>
@@ -74,44 +78,34 @@
           return default_ || false;
       }    
 
-      var mInvert;
       var mHollowfont;
+      var mInvert;
+      var mUkdate;
       var mBranding;
       
       $().ready(function () {
 
-        mInvert = parseInt(localStorage.getItem("invert"));
+
 	mHollowfont = parseInt(localStorage.getItem("hollowfont"));
+        mInvert = parseInt(localStorage.getItem("invert"));
+        mUkdate = parseInt(localStorage.getItem("ukdate"));
         mBranding = parseInt(localStorage.getItem("branding"));
 		
 
+	if(isNaN(mHollowfont)) {
+          mHollowfont = 1;
+        }
         if(isNaN(mInvert)) {
           mInvert = 0;
         }
-	if(isNaN(mHollowfont)) {
-          mHollowfont = 1;
+	if(isNaN(mUkdate)) {
+          mUkdate = 0;
         }
         if(isNaN(mBranding)) {
           mBranding = 0;
         }          
         
         
-        if(mInvert) {
-          $('#invert1').prop('checked', true);
-          $('#invert1').parent().addClass('active');
-          
-          $('#invert2').prop('checked', false);
-          $('#invert2').parent().removeClass('active');
-        } 
-        else {
-          $('#invert1').prop('checked', false);
-          $('#invert1').parent().removeClass('active');
-          
-          $('#invert2').prop('checked', true);
-          $('#invert2').parent().addClass('active'); 
-        }
-        
-
         if(mHollowfont) {
           $('#hollowfont1').prop('checked', true);
           $('#hollowfont1').parent().addClass('active');
@@ -127,7 +121,38 @@
           $('#hollowfont2').parent().addClass('active'); 
         }
 
+
+        if(mInvert) {
+          $('#invert1').prop('checked', true);
+          $('#invert1').parent().addClass('active');
+          
+          $('#invert2').prop('checked', false);
+          $('#invert2').parent().removeClass('active');
+        } 
+        else {
+          $('#invert1').prop('checked', false);
+          $('#invert1').parent().removeClass('active');
+          
+          $('#invert2').prop('checked', true);
+          $('#invert2').parent().addClass('active'); 
+        }
         		
+        if(mUkdate) {
+          $('#ukdate1').prop('checked', true);
+          $('#ukdate1').parent().addClass('active');
+          
+          $('#ukdate2').prop('checked', false);
+          $('#ukdate2').parent().removeClass('active');
+        } 
+        else {
+          $('#ukdate1').prop('checked', false);
+          $('#ukdate1').parent().removeClass('active');
+          
+          $('#ukdate2').prop('checked', true);
+          $('#ukdate2').parent().addClass('active'); 
+        }
+
+
         if(mBranding) {
           $('#branding1').prop('checked', true);
           $('#branding1').parent().addClass('active');
@@ -147,17 +172,20 @@
 
       $("#configure-form").submit(function(e) {  
 
-        mInvert = $('#invert1').prop('checked') ? 1 : 0;
 	mHollowfont = $('#hollowfont1').prop('checked') ? 1 : 0;
+        mInvert = $('#invert1').prop('checked') ? 1 : 0;
+	mUkdate = $('#ukdate1').prop('checked') ? 1 : 0;
         mBranding = $('#branding1').prop('checked') ? 1 : 0;
 
-        localStorage.setItem("invert", mInvert); 
 	localStorage.setItem("hollowfont", mHollowfont); 
+        localStorage.setItem("invert", mInvert); 
+	localStorage.setItem("ukdate", mUkdate); 
         localStorage.setItem("branding", mBranding); 
         
         var j = {
-          invert : parseInt(mInvert),
 	  hollowfont : parseInt(mHollowfont),
+          invert : parseInt(mInvert),
+	  ukdate : parseInt(mUkdate),
           branding: parseInt(mBranding)
         };
         
