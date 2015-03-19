@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html manifest="manifest.appcache">
 <head>
 	<title>Hollow3D Settings</title>
@@ -49,6 +48,17 @@
           </label>
         </div>
         <hr />
+        <h4>Hide Leading Zero for Dates</h4>
+        <p><small>Choose 'Yes' to hide the Pebble logo or 'No' to show it.</small></p>
+        <div class="btn-group" data-toggle="buttons">
+          <label class="btn btn-primary">
+            <input type="radio" name="hidezero" id="hidezero1" value="1"> Yes
+          </label>
+          <label class="btn btn-primary">
+            <input type="radio" name="hidezero" id="hidezero2" value="0"> No
+          </label>
+        </div>
+        <hr />
         <h4>Hide Branding</h4>
         <p><small>Choose 'Yes' to hide the Pebble logo or 'No' to show it.</small></p>
         <div class="btn-group" data-toggle="buttons">
@@ -83,20 +93,17 @@
           }
           return default_ || false;
       }    
-
       var mHollowfont;
       var mInvert;
       var mUkdate;
       var mBranding;
       
       $().ready(function () {
-
-
 	mHollowfont = parseInt(localStorage.getItem("hollowfont"));
         mInvert = parseInt(localStorage.getItem("invert"));
         mUkdate = parseInt(localStorage.getItem("ukdate"));
+        mHidezero = parseInt(localStorage.getItem("hidezero"));
         mBranding = parseInt(localStorage.getItem("branding"));
-
 	if(isNaN(mHollowfont)) {
           mHollowfont = 1;
         }
@@ -106,6 +113,9 @@
 	if(isNaN(mUkdate)) {
           mUkdate = 0;
         }
+	if(isNaN(mHidezero)) {
+          mHidezero = 1;
+        }          
         if(isNaN(mBranding)) {
           mBranding = 0;
         }          
@@ -125,8 +135,6 @@
           $('#hollowfont2').prop('checked', true);
           $('#hollowfont2').parent().addClass('active'); 
         }
-
-
         if(mInvert) {
           $('#invert1').prop('checked', true);
           $('#invert1').parent().addClass('active');
@@ -156,8 +164,20 @@
           $('#ukdate2').prop('checked', true);
           $('#ukdate2').parent().addClass('active'); 
         }
-
-
+	if(mHidezero) {
+          $('#hidezero1').prop('checked', true);
+          $('#hidezero1').parent().addClass('active');
+          
+          $('#hidezero2').prop('checked', false);
+          $('#hidezero2').parent().removeClass('active');
+        } 
+        else {
+          $('#hidezero1').prop('checked', false);
+          $('#hidezero1').parent().removeClass('active');
+          
+          $('#hidezero2').prop('checked', true);
+          $('#hidezero2').parent().addClass('active'); 
+        }	
         if(mBranding) {
           $('#branding1').prop('checked', true);
           $('#branding1').parent().addClass('active');
@@ -174,34 +194,31 @@
         }	
 		
       });
-
-
-
       $("#configure-form").submit(function(e) {  
-
 	mHollowfont = $('#hollowfont1').prop('checked') ? 1 : 0;
         mInvert = $('#invert1').prop('checked') ? 1 : 0;
 	mUkdate = $('#ukdate1').prop('checked') ? 1 : 0;
-        mBranding = $('#branding1').prop('checked') ? 1 : 0;
-
+        mHidezero = $('#hidezero1').prop('checked') ? 1 : 0;
+	mBranding = $('#branding1').prop('checked') ? 1 : 0;
+		
 
 	localStorage.setItem("hollowfont", mHollowfont); 
         localStorage.setItem("invert", mInvert); 
 	localStorage.setItem("ukdate", mUkdate); 
+	localStorage.setItem("hidezero", mHidezero); 
         localStorage.setItem("branding", mBranding); 
 
         var j = {
 	  hollowfont : parseInt(mHollowfont),
           invert : parseInt(mInvert),
 	  ukdate : parseInt(mUkdate),
+	  hidezero : parseInt(mHidezero),
           branding : parseInt(mBranding)
         };
         
         var return_to = getQueryParam('return_to', 'pebblejs://close#');
         document.location = return_to + JSON.stringify(j);
-
         //window.location.href = "pebblejs://close#" + JSON.stringify(j);
-
         e.preventDefault();
       });
   </script>
