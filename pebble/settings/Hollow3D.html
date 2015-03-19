@@ -3,7 +3,7 @@
 <head>
 	<title>Hollow3D Settings</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	
+
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/bootstrap-theme.min.css" rel="stylesheet">
 
@@ -49,6 +49,15 @@
           </label>
         </div>
         <hr />
+        <h4>Hide Leading Zeros</h4>
+        <p><small>Choose 'Yes' to hide leading zeros on time and date or 'No' to show them.</small></p>
+        <div class="btn-group" data-toggle="buttons">
+          <label class="btn btn-primary">
+            <input type="radio" name="hidezeros" id="hidezeros1" value="1"> Yes
+          </label>
+          <label class="btn btn-primary">
+            <input type="radio" name="hidezeros" id="hidezeros2" value="0"> No
+          </label>
         <h4>Hide Branding</h4>
         <p><small>Choose 'Yes' to hide the Pebble logo or 'No' to show it.</small></p>
         <div class="btn-group" data-toggle="buttons">
@@ -88,6 +97,7 @@
       var mInvert;
       var mUkdate;
       var mBranding;
+      var mHidezeros;
       
       $().ready(function () {
 
@@ -96,7 +106,7 @@
         mInvert = parseInt(localStorage.getItem("invert"));
         mUkdate = parseInt(localStorage.getItem("ukdate"));
         mBranding = parseInt(localStorage.getItem("branding"));
-		
+	mHidezeros = parseInt(localStorage.getItem("hidezeros"));		
 
 	if(isNaN(mHollowfont)) {
           mHollowfont = 1;
@@ -109,6 +119,9 @@
         }
         if(isNaN(mBranding)) {
           mBranding = 0;
+        }          
+        if(isNaN(mHidezeros)) {
+          mHidezeros = 0;
         }          
         
         
@@ -176,23 +189,46 @@
 		
       });
 
+
+        if(mHidezeros) {
+          $('#hidezeros1').prop('checked', true);
+          $('#hidezeros1').parent().addClass('active');
+          
+          $('#hidezeros2').prop('checked', false);
+          $('#hidezeros2').parent().removeClass('active');
+        } 
+        else {
+          $('#hidezeros1').prop('checked', false);
+          $('#hidezeros1').parent().removeClass('active');
+          
+          $('#hidezeros2').prop('checked', true);
+          $('#hidezeros2').parent().addClass('active'); 
+        }	
+		
+      });
+
+
+
+
       $("#configure-form").submit(function(e) {  
 
 	mHollowfont = $('#hollowfont1').prop('checked') ? 1 : 0;
         mInvert = $('#invert1').prop('checked') ? 1 : 0;
 	mUkdate = $('#ukdate1').prop('checked') ? 1 : 0;
         mBranding = $('#branding1').prop('checked') ? 1 : 0;
+        mHidezeros = $('#hidezeros1').prop('checked') ? 1 : 0;
 
 	localStorage.setItem("hollowfont", mHollowfont); 
         localStorage.setItem("invert", mInvert); 
 	localStorage.setItem("ukdate", mUkdate); 
         localStorage.setItem("branding", mBranding); 
-        
+        localStorage.setItem("hidezeros", mHidezeros); 
         var j = {
 	  hollowfont : parseInt(mHollowfont),
           invert : parseInt(mInvert),
 	  ukdate : parseInt(mUkdate),
-          branding: parseInt(mBranding)
+          branding : parseInt(mBranding),
+	  hidezeros : parseInt(mHidezeros)
         };
         
         var return_to = getQueryParam('return_to', 'pebblejs://close#');
