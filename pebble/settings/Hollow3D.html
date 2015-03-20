@@ -105,6 +105,7 @@
         mUkdate = parseInt(localStorage.getItem("ukdate"));
         mHidezeros = parseInt(localStorage.getItem("hidezeros"));
         mBranding = parseInt(localStorage.getItem("branding"));
+	
 	if(isNaN(mHollowfont)) {
           mHollowfont = 1;
         }
@@ -165,6 +166,7 @@
           $('#ukdate2').prop('checked', true);
           $('#ukdate2').parent().addClass('active'); 
         }
+	
 	if(mHidezeros) {
           $('#hidezeros1').prop('checked', true);
           $('#hidezeros1').parent().addClass('active');
@@ -199,7 +201,7 @@
 	mHollowfont = $('#hollowfont1').prop('checked') ? 1 : 0;
         mInvert = $('#invert1').prop('checked') ? 1 : 0;
 	mUkdate = $('#ukdate1').prop('checked') ? 1 : 0;
-        mHidezero = $('#hidezero1').prop('checked') ? 1 : 0;
+        mHidezeros = $('#hidezeros1').prop('checked') ? 1 : 0;
 	mBranding = $('#branding1').prop('checked') ? 1 : 0;
 		
 
