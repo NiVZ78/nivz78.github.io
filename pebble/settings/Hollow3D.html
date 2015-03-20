@@ -52,10 +52,10 @@
         <p><small>Choose 'Yes' to hide the Pebble logo or 'No' to show it.</small></p>
         <div class="btn-group" data-toggle="buttons">
           <label class="btn btn-primary">
-            <input type="radio" name="hidezero" id="hidezero1" value="1"> Yes
+            <input type="radio" name="hidezeros" id="hidezeros1" value="1"> Yes
           </label>
           <label class="btn btn-primary">
-            <input type="radio" name="hidezero" id="hidezero2" value="0"> No
+            <input type="radio" name="hidezeros" id="hidezeros2" value="0"> No
           </label>
         </div>
         <hr />
@@ -96,13 +96,14 @@
       var mHollowfont;
       var mInvert;
       var mUkdate;
+      var mHidezeros;
       var mBranding;
       
       $().ready(function () {
 	mHollowfont = parseInt(localStorage.getItem("hollowfont"));
         mInvert = parseInt(localStorage.getItem("invert"));
         mUkdate = parseInt(localStorage.getItem("ukdate"));
-        mHidezero = parseInt(localStorage.getItem("hidezero"));
+        mHidezeros = parseInt(localStorage.getItem("hidezeros"));
         mBranding = parseInt(localStorage.getItem("branding"));
 	if(isNaN(mHollowfont)) {
           mHollowfont = 1;
@@ -113,8 +114,8 @@
 	if(isNaN(mUkdate)) {
           mUkdate = 0;
         }
-	if(isNaN(mHidezero)) {
-          mHidezero = 1;
+	if(isNaN(mHidezeros)) {
+          mHidezeros = 1;
         }          
         if(isNaN(mBranding)) {
           mBranding = 0;
@@ -164,19 +165,19 @@
           $('#ukdate2').prop('checked', true);
           $('#ukdate2').parent().addClass('active'); 
         }
-	if(mHidezero) {
-          $('#hidezero1').prop('checked', true);
-          $('#hidezero1').parent().addClass('active');
+	if(mHidezeros) {
+          $('#hidezeros1').prop('checked', true);
+          $('#hidezeros1').parent().addClass('active');
           
-          $('#hidezero2').prop('checked', false);
-          $('#hidezero2').parent().removeClass('active');
+          $('#hidezeros2').prop('checked', false);
+          $('#hidezeros2').parent().removeClass('active');
         } 
         else {
-          $('#hidezero1').prop('checked', false);
-          $('#hidezero1').parent().removeClass('active');
+          $('#hidezeros1').prop('checked', false);
+          $('#hidezeros1').parent().removeClass('active');
           
-          $('#hidezero2').prop('checked', true);
-          $('#hidezero2').parent().addClass('active'); 
+          $('#hidezeros2').prop('checked', true);
+          $('#hidezeros2').parent().addClass('active'); 
         }	
         if(mBranding) {
           $('#branding1').prop('checked', true);
@@ -205,14 +206,14 @@
 	localStorage.setItem("hollowfont", mHollowfont); 
         localStorage.setItem("invert", mInvert); 
 	localStorage.setItem("ukdate", mUkdate); 
-	localStorage.setItem("hidezero", mHidezero); 
+	localStorage.setItem("hidezeros", mHidezeros); 
         localStorage.setItem("branding", mBranding); 
 
         var j = {
 	  hollowfont : parseInt(mHollowfont),
           invert : parseInt(mInvert),
 	  ukdate : parseInt(mUkdate),
-	  hidezero : parseInt(mHidezero),
+	  hidezeros : parseInt(mHidezeros),
           branding : parseInt(mBranding)
         };
         
