@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/bootstrap-theme.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="css/spectrum.css">
+</head>
+
+<body>
+
+<canvas id="canvas" width="144" height="168">
+Your browser does not support the HTML5 canvas tag.
+</canvas>
+<br/>
+
+<label><input name="light" id="light" class="picker">&nbsp;Light Colour</label><br />
+<label><input name="dark" id="dark" class="picker">&nbsp;Dark Colour</label><br />
+<label><input name="background" id="background" class="picker">&nbsp;Background Colour</label><br />
+
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>  
+<script type="text/javascript" src="js/spectrum.js"></script>
+<script type="text/javascript" src="js/gcolor.js"></script>
+
+<script>
+
+var img = new Image();
+img.src = "http://nivz78.github.io/pebble/settings/images/Edg3d.png";
+img.onload = function() {
+        draw();
+      };
+
+function draw(){
+
+    // Get the colours from our Spectrum pickers
+    var light = $("#light").spectrum("get").toRgb();
+    var dark = $("#dark").spectrum("get").toRgb();
+    var background = $("#background").spectrum("get").toRgb();
+
+    // Get a handle to the Canvas and Context
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+
+    // Draw the original image
+    ctx.drawImage(img, 0, 0);
+
+    // Read the pixel data from the original image    
+    var imgData = ctx.getImageData(0,0,canvas.width,canvas.height);
+    var data = imgData.data;
+
+
+    // Loop through the pixel data
+    for(var i=0; i<data.length; i+=4) {
+
+	// Get the individual RGB values
+        var red = data[i];
+	var green = data[i+1];
+	var blue = data[i+2];
+	var alpha = data[i+3];
+
+	// Compare current pixel to original light colour
+	if (red+""+green+""+blue == "170170170"){
+	    // If it matches then replace it with RGB from light picker
+	    data[i]   = light["r"];
+	    data[i+1] = light["g"];
+	    data[i+2] = light["b"];
+	}
+	// Compare current pixel to original dark colour
+        else if (red+""+green+""+blue == "858585"){
+	    // If it matches then replace it with RGB from dark picker
+	    data[i]   = dark["r"];
+	    data[i+1] = dark["g"];
+	    data[i+2] = dark["b"];
+        }
+	// Compare current pixel to original background colour
+        else if (red+""+green+""+blue == "000"){
+  	    // If it matches then replace it with RGB from background picker
+	    data[i]   = background["r"];
+	    data[i+1] = background["g"];
+	    data[i+2] = background["b"];
+	}
+
+
+    }
+
+    // Push the data back to the canvas
+    ctx.putImageData(imgData, 0, 0);
+
+}
+
+
+// Page onLoad
+$().ready(function () {	
+
+// Setup Spectrum picker with Pebble Time Palette
+$(".picker").spectrum({
+            showPaletteOnly: true,
+            hideAfterPaletteSelect:true,
+            preferredFormat: "hex3",
+            change: function() {
+                draw();
+            },
+            palette: [
+              [ '000', '005', '00a', '00f', '050', '055', '05a', '05f' ],
+              [ '500', '505', '50a', '50f', '550', '555', '55a', '55f' ],
+              [ 'a00', 'a05', 'a0a', 'a0f', 'a50', 'a55', 'a5a', 'a5f' ],
+              [ 'f00', 'f05', 'f0a', 'f0f', 'f50', 'f55', 'f5a', 'f5f' ],
+              [ '0a0', '0a5', '0aa', '0af', '0f0', '0f5', '0fa', '0ff' ],
+              [ '5a0', '5a5', '5aa', '5af', '5f0', '5f5', '5fa', '5ff' ],
+              [ 'aa0', 'aa5', 'aaa', 'aaf', 'af0', 'af5', 'afa', 'aff' ],
+              [ 'fa0', 'fa5', 'faa', 'faf', 'ff0', 'ff5', 'ffa', 'fff' ]
+            ]
+        });
+
+// Setup default colours
+$("#light").spectrum("set", '#aaa');
+$("#dark").spectrum("set", '#555');
+$("#background").spectrum("set", '#000');
+
+// Do the initial draw of the preview
+//draw();
+
+});
+
+
+</script>
+
+</body>
+</html>
