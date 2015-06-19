@@ -8,15 +8,22 @@
 
 <body>
 
+<div class="container">
+
+<form id="configure-form" class="form-configure well" action="#" method="POST">
 <canvas id="canvas" width="144" height="168">
 Your browser does not support the HTML5 canvas tag.
 </canvas>
 <br/>
 
+<label><input name="realcolour" id="realcolour" type="checkbox" onClick="draw()">&nbsp Use real colour preview</label><br />
 <label><input name="outer" id="outer" class="picker">&nbsp;Outer Panel</label><br />
 <label><input name="inner" id="inner" class="picker">&nbsp;Inner Panel</label><br />
 <label><input name="labels" id="labels" class="picker">&nbsp;Labels & Lines</label><br />
 
+</form>
+
+</div>
 
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>  
@@ -26,21 +33,30 @@ Your browser does not support the HTML5 canvas tag.
 <script>
 
 var img = new Image();
-img.src = "http://nivz78.github.io/pebble/settings/images/LAQ-2000D.png";
-img.onload = function() {
-        draw();
-      };
+img.src = "Preview.png";
+
 
 function draw(){
 
     // Get the colours from our Spectrum pickers
-    var outer = $("#outer").spectrum("get").toRgb();
-    var inner = $("#inner").spectrum("get").toRgb();
-    var labels = $("#labels").spectrum("get").toRgb();
+    var outer = $("#outer").spectrum("get").toHex();
+    var inner = $("#inner").spectrum("get").toHex();
+    var labels = $("#labels").spectrum("get").toHex();
+
+    // Get a handle to the checkbox
+    var realcolour = document.getElementById("realcolour");
+
+    if (realcolour.checked){
+        // Convert to realistic pebble colours
+        outer = GColor.toSunnyHex(outer);
+        inner = GColor.toSunnyHex(inner);
+        labels = GColor.toSunnyHex(labels);
+    };
 
     // Get a handle to the Canvas and Context
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
+    
 
     // Draw the original image
     ctx.drawImage(img, 0, 0);
@@ -62,23 +78,23 @@ function draw(){
 	// Compare current pixel to original Outer colour
 	if (red+""+green+""+blue == "170170170"){
 	    // If it matches then replace it with RGB from outer picker
-	    data[i]   = outer["r"];
-	    data[i+1] = outer["g"];
-	    data[i+2] = outer["b"];
+	    data[i]   = parseInt(outer.substring(0,2),16);
+	    data[i+1] = parseInt(outer.substring(2,4),16);
+	    data[i+2] = parseInt(outer.substring(4,6),16);
 	}
 	// Compare current pixel to original Inner colour
         else if (red+""+green+""+blue == "000"){
   	    // If it matches then replace it with RGB from inner picker
-	    data[i]   = inner["r"];
-	    data[i+1] = inner["g"];
-	    data[i+2] = inner["b"];
+	    data[i]   = parseInt(inner.substring(0,2),16);
+	    data[i+1] = parseInt(inner.substring(2,4),16);
+	    data[i+2] = parseInt(inner.substring(4,6),16);;
 	}
 	// Compare current pixel to original Labels colour
         else if (red+""+green+""+blue == "255255255"){
 	    // If it matches then replace it with RGB from labels picker
-	    data[i]   = labels["r"];
-	    data[i+1] = labels["g"];
-	    data[i+2] = labels["b"];
+	    data[i]   = parseInt(labels.substring(0,2),16);
+	    data[i+1] = parseInt(labels.substring(2,4),16);
+	    data[i+2] = parseInt(labels.substring(4,6),16);
         }
 
     }
@@ -118,7 +134,7 @@ $("#inner").spectrum("set", '#000');
 $("#labels").spectrum("set", '#fff');
 
 // Do the initial draw of the preview
-//draw();
+draw();
 
 });
 
