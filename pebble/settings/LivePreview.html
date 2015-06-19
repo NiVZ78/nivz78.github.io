@@ -34,7 +34,9 @@ Your browser does not support the HTML5 canvas tag.
 
 var img = new Image();
 img.src = "/images/LAQ-2000D.png";
-img.onLoad = "draw()";
+img.onload = function() {
+        draw();
+      };
 
 
 function draw(){
