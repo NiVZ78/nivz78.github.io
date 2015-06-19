@@ -33,7 +33,8 @@ Your browser does not support the HTML5 canvas tag.
 <script>
 
 var img = new Image();
-img.src = "http://nivz78.github.io/pebble/settings/images/LAQ-2000D.png";
+img.src = "/images/LAQ-2000D.png";
+img.onLoad = "draw()";
 
 
 function draw(){
@@ -134,7 +135,7 @@ $("#inner").spectrum("set", '#000');
 $("#labels").spectrum("set", '#fff');
 
 // Do the initial draw of the preview
-draw();
+//draw();
 
 });
 
