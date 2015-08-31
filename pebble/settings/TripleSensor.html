@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0" name="viewport">
+<title>Triple Sensor for Pebble</title>
+<link rel="stylesheet" href="dist/css/slate.css">
+</head>
+<body>
+
+<form id="main-form">
+<div class="item-container">
+<div class="item-container-header"><h3>Triple Sensor for Pebble</h3></div>
+<div class="item-container-content">
+<div class="item">
+Choose your Triple Sensor settings below:
+</div>
+</div>
+</div>
+
+<div class="item-container">
+  <div class="item-container-header">Branding</div>
+  <div class="item-container-content">
+    <label class="item">
+      Show Pebble logo
+      <input id="test" type="checkbox" class="item-toggle" name="branding">
+    </label>
+  </div>
+</div>
+
+
+<div class="item-container">
+  <div class="item-container-header">Time</div>
+  <div class="item-container-content">
+    <label class="item">
+      Show seconds
+      <input type="checkbox" class="item-toggle" name="seconds">
+    </label>
+    <label class="item">
+      Leading zero on hour
+      <input type="checkbox" class="item-toggle" name="zerohours">
+    </label>
+  </div>
+</div>
+
+
+<div class="item-container">
+  <div class="item-container-header">Date</div>
+  <div class="item-container-content">
+    <div class="item tab-buttons">
+      <a name="dateformat" data-info="0" class="tab-button active">MM-DD-YYYY</a>
+      <a name="dateformat" data-info="1" class="tab-button">DD-MM-YYYY</a>
+    </div>
+    <label class="item">
+      Leading zero on dates
+      <input type="checkbox" class="item-toggle" name="zerodates">
+    </label>
+  </div>
+</div>
+
+
+<div class="item-container">
+  <div class="item-container-header">Sensors</div>
+<div class="item">
+Choose which sensor modes to enable (tap/flick Pebble to cylce through modes)
+</div>
+  <div class="item-container-content">
+    <label class="item">
+      Compass
+      <input type="checkbox" class="item-toggle" name="compass">
+    </label>
+    <label class="item">
+      Barometer
+      <input type="checkbox" class="item-toggle" name="barometer">
+    </label>
+    <label class="item">
+      Altimeter
+      <input type="checkbox" class="item-toggle" name="altimeter">
+    </label>
+  </div>
+</div>
+
+
+
+
+<div class="item-container">
+  <div class="item-container-header">Sensor Formats</div>
+  <div class="item">
+    Temperature
+  </div>
+  <div class="item-container-content">
+    <div class="item tab-buttons">
+      <a name="tempformat" data-info="0" class="tab-button active">Farenheit</a>
+      <a name="tempformat" data-info="1" class="tab-button">Celsius</a>
+    </div>
+  </div>
+</div>
+
+<div class="item-container">
+  <div class="item">
+    Barometer
+  </div>
+  <div class="item-container-content">
+    <div class="item tab-buttons">
+      <a name="baroformat" data-info="0" class="tab-button active">inHg</a>
+      <a name="baroformat" data-info="1" class="tab-button">hPa(mb)</a>
+    </div>
+  </div>
+</div>
+
+<div class="item-container">
+  <div class="item">
+    Altimeter
+  </div>
+  <div class="item-container-content">
+    <div class="item tab-buttons">
+      <a name="altformat" data-info="0" class="tab-button active">Feet (ft)</a>
+      <a name="altformat" data-info="1" class="tab-button">Meters (m)</a>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="item-container">
+  <div class="item-container-header">Colour Theme</div>
+  <div class="item-container-content">
+
+    <div style="text-align: center;">
+        <canvas id="canvas" width="144" height="168">
+          Your browser does not support the HTML5 canvas tag.
+        </canvas>
+    </div>
+    <div style="text-align: center;">
+        <label>
+            <input name="realcolour" id="realcolour" type="checkbox" onChange="draw();">&nbspUse real colour preview
+        </label>
+    </div>
+
+
+    <label class="item">
+      Background
+      <input type="text" class="item-color item-color-normal" name="color-1" value="#000000">
+    </label>
+     <label class="item">
+      Outer Circle
+      <input type="text" class="item-color item-color-normal" name="color-2" value="#55aaaa">
+    </label>
+     <label class="item">
+      Top Panel
+      <input type="text" class="item-color item-color-normal" name="color-3" value="#55aa55">
+    </label>
+     <label class="item">
+      Bottom Panel
+      <input type="text" class="item-color item-color-normal" name="color-4" value="#aaaaaa">
+    </label>
+     <label class="item">
+      Time, Date & Day
+      <input type="text" class="item-color item-color-normal" name="color-5" value="#000000">
+    </label>
+     <label class="item">
+      Watch Labels
+      <input type="text" class="item-color item-color-normal" name="color-6" value="#ffffff">
+    </label>
+     <label class="item">
+      Top Arrow
+      <input type="text" class="item-color item-color-normal" name="color-7" value="#aa0000">
+    </label>
+  </div>
+</div>
+
+
+
+
+
+<div class="item-container">
+<div class="button-container">
+<input type="button" class="item-button" value="Save">
+</div>
+</div>
+</form>
+
+
+
+<script src="dist/js/slate.js"></script>
+<script src="js/jquery-2.1.4.min.js"></script>
+<script src="js/gcolor.js"></script>
+
+<script>
+
+
+var img = new Image();
+img.src = "images/TripleSensor.png";
+img.onload = function() {
+        draw();
+      };
+
+
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+    return componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+function hexTorgb(c) {
+    return parseint(c, 16);
+}
+
+
+function draw(){
+
+//    alert("Drawing");
+
+    // Array to hold original colors
+    var oColor = ['000000', '55aaaa', '55aa55', 'aaaaaa', '000055', 'ffffff', 'aa0000'];
+
+    // Get a handle to the realcolour checkbox
+    var realcolour = document.getElementById("realcolour");
+
+    // Get the colours from our Spectrum pickers
+    var cColor = [];
+    var i=0;
+
+    $('.item-color').map(function () {
+ 
+        if (realcolour.checked){ 
+            cColor[i] = this.value.replace('#','');
+            cColor[i] = cColor[i].replace('0x', '');
+            cColor[i] = GColor.toSunnyHex(cColor[i]);
+            i++;
+        }
+        else
+        {
+            cColor[i] = this.value.replace('#','');
+            cColor[i] = cColor[i].replace('0x', '');
+            i++
+        }
+    });
+
+//    for(var i=0; i<cColor.length; i++) {
+//        alert(i +": " + cColor[i]);
+//    }
+        
+
+    // Get a handle to the Canvas and Context
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    
+
+    // Draw the original image
+    ctx.drawImage(img, 0, 0);
+
+
+    // Read the pixel data from the original image    
+    var imgData = ctx.getImageData(0,0,canvas.width, canvas.height);
+    var data = imgData.data;
+
+
+    // Loop through the pixel data
+    for(var i=0; i<data.length; i+=4) {
+
+	// Get the individual RGB values
+        var red = data[i];
+	var green = data[i+1];
+	var blue = data[i+2];
+	var alpha = data[i+3];
+
+        // Convert to hex
+        var hexcol = rgbToHex(red, green, blue);
+
+//alert(hexcol);
+        
+	for (var j=0; j<oColor.length; j++) {
+//alert("J: " + j);
+            if (hexcol == oColor[j]) {
+
+		data[i]   = parseInt(cColor[j].substring(0,2),16);
+	        data[i+1] = parseInt(cColor[j].substring(2,4),16);
+	        data[i+2] = parseInt(cColor[j].substring(4,6),16);
+                break;
+	    }
+
+        }
+
+    }
+
+    // Push the data back to the canvas
+    ctx.putImageData(imgData, 0, 0);
+
+
+}
+
+
+
+
+
+// Make color pickers force a re-draw
+$('input:text').change(function() {draw();});
+
+
+
+
+// Get query variables
+function getQueryParam(variable, defaultValue) {
+  // Find all URL parameters
+  var query = location.search.substring(1);
+  var vars = query.split('&');
+  for (var i = 0; i < vars.length; i++) {
+    var pair = vars[i].split('=');
+
+    // If the query variable parameter is found, decode it to use and return it for use
+    if (pair[0] === variable) {
+      return decodeURIComponent(pair[1]);
+    }
+  }
+  return defaultValue || false;
+}
+
+
+
+$(".item-button").click(function(e) {
+    var btn = $(this).val();
+    if(btn == 'Save') {
+
+	var config = {};
+
+	$('input:checkbox').map(function () {
+  			config[this.name] = (this.checked ? 1:0);
+			});
+		
+	$('.tab-button.active').map(function () {
+  			config[this.name] = $(this).data("info");
+			});
+
+	alert(JSON.stringify(config));
+
+    }
+
+  });
+
+</script>
+</body>
+</html>
