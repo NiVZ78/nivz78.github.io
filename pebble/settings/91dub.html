@@ -300,9 +300,6 @@ Choose your 91 Dub v3.0 settings below:
 
 <script>
 
-
-
-
         $.get( "themes.json",{ "_": $.now() }, function( data ) {
           var sel = $("#presets");
           sel.empty();
@@ -311,10 +308,6 @@ Choose your 91 Dub v3.0 settings below:
             sel.append('<option value="' + encodeURIComponent(JSON.stringify(data[i])) + '">' + data[i].theme[0].name + '</option>');
           }
         });  
-
-
-
-
 
 
 
