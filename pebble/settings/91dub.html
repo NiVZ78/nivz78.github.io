@@ -302,6 +302,7 @@ Choose your 91 Dub v3.0 settings below:
 
 <script>
 
+
 function getThemes() {   
         $.get( "themes.json",{ "_": $.now() }, function( data ) {
           var sel = $("#presets");
@@ -314,11 +315,8 @@ function getThemes() {
     }
 
 
-
 $().ready(function () {
-
       getThemes();
-
       });
 
 
