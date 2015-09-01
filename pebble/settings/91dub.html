@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0" name="viewport">
+<title>91 Dub v3.0 for Pebble</title>
+<link rel="stylesheet" href="dist/css/slate.css">
+</head>
+<body>
+
+<form id="main-form">
+<div class="item-container">
+<div class="item-container-header"><h3>91 Dub for Pebble</h3></div>
+<div class="item-container-content">
+<div class="item">
+Choose your 91 Dub v3.0 settings below:
+</div>
+</div>
+</div>
+
+<div class="item-container">
+  <div class="item-container-header">Blink</div>
+  <div class="item-container-content">
+    <label class="item">
+    The colon between the hours and minutes will blink every second
+    </label>
+    <div class="item tab-buttons">
+      <a name="blink" data-info="0" class="tab-button active">Yes</a>
+      <a name="blink" data-info="1" class="tab-button">No</a>
+      <a name="blink" data-info="2" class="tab-button">Double Rate</a>
+    </div>
+  </div>
+</div>
+
+<div class="item-container">
+  <div class="item-container-header">Invert</div>
+  <div class="item-container-content">
+    <label class="item">
+      Inverted colour scheme
+      <input type="checkbox" class="item-toggle" name="invert">
+    </label>
+  </div>
+</div>
+
+<div class="item-container">
+  <div class="item-container-header">Bluetooth Vibe</div>
+  <div class="item-container-content">
+    <label class="item">
+      Vibrate on Bluetooth disconnect
+      <input type="checkbox" class="item-toggle" name="bluetoothvibe">
+    </label>
+  </div>
+</div>
+
+<div class="item-container">
+  <div class="item-container-header">Hourly Vibe</div>
+  <div class="item-container-content">
+    <label class="item">
+      Vibrate on the hour
+      <input type="checkbox" class="item-toggle" name="hourlyvibe">
+    </label>
+  </div>
+</div>
+
+
+<div class="item-container">
+  <div class="item-container-header">Show seconds</div>
+  <div class="item-container-content">
+    <label class="item">
+      Reduces the size of the clock to display settings
+      <input type="checkbox" class="item-toggle" name="seconds">
+    </label>
+  </div>
+</div>
+
+
+<div class="item-container">
+  <div class="item-container-header">Power Saving</div>
+  <div class="item-container-content">
+    <label class="item">
+      Set start and end times to save power while you're sleeping. <br/>In power save mode, we disable blink, don't vibrate, reduce screen redraw, ignore bluetooth state and disable seconds
+      <input type="checkbox" class="item-toggle" name="powersave">
+    </label>
+  </div>
+</div>
+
+
+<div class="item-container">
+  <div class="item-container-header">Pebble Time</div>
+  <div class="item-container-content">
+
+   <label class="item">
+      Presets
+      <select name="presets" dir='rtl' class="item-select">
+      </select>
+    </label>
+
+    <div style="text-align: center;">
+        <canvas id="canvas" width="144" height="168">
+          Your browser does not support the HTML5 canvas tag.
+        </canvas>
+    </div>
+    <div style="text-align: center;">
+        <label>
+            <input name="realcolour" id="realcolour" type="checkbox" onChange="draw();">&nbspUse real colour preview
+        </label>
+    </div>
+</div>
+
+<div class="item-container">
+  <div class="item-container-header">Colour Sets</div>
+  <div class="item-container-content">
+    <label class="item">
+    You can store 2 of your own colour sets. Select primary, set your colours, then save
+    </label>
+    <div class="item tab-buttons">
+      <a name="coloursets" data-info="0" class="tab-button active">Primary</a>
+      <a name="coloursets" data-info="1" class="tab-button">Secondary</a>
+    </div>
+  </div>
+
+
+<div class="item-container">
+    <div class="item-container-header">Design a Theme</div>
+    <div class="item-container-content">
+
+    <label class="item">
+      Background
+      <input type="text" class="item-color item-color-normal" name="bg4color" value="#000000">
+    </label>
+     <label class="item">
+      Branding Text
+      <input type="text" class="item-color item-color-normal" name="d9color" value="#ffffff">
+    </label>
+    </div>
+</div>
+
+<div class="item-container">
+    <div class="item-container-header">Centre Panel</div>
+    <div class="item-container-content">
+
+     <label class="item">
+      Outer Border
+      <input type="text" class="item-color item-color-normal" name="bg1color" value="#ffffff">
+    </label>
+     <label class="item">
+      Inner Border
+      <input type="text" class="item-color item-color-normal" name="bg2color" value="#000000">
+    </label>
+     <label class="item">
+      Inner Panel
+      <input type="text" class="item-color item-color-normal" name="bg3color" value="#ffffff">
+    </label>
+     <label class="item">
+      Date
+      <input type="text" class="item-color item-color-normal" name="t1color" value="#000000">
+    </label>
+     <label class="item">
+      AM/PM/24H
+      <input type="text" class="item-color item-color-normal" name="t2color" value="#000000">
+    </label>
+     <label class="item">
+      Time
+      <input type="text" class="item-color item-color-normal" name="t4color" value="#000000">
+    </label>
+     <label class="item">
+      Time Shadow
+      <input type="text" class="item-color item-color-normal" name="t3color" value="#ffffff">
+    </label>
+
+  </div>
+</div>
+
+
+<div class="item-container">
+    <div class="item-container-header">Lines</div>
+    <div class="item-container-content">
+
+     <label class="item">
+      Line Top
+      <input type="text" class="item-color item-color-normal" name="d1color" value="#ffffff">
+    </label>
+     <label class="item">
+      Line Bottom
+      <input type="text" class="item-color item-color-normal" name="d2color" value="#ffffff">
+    </label>
+
+  </div>
+</div>
+
+
+<div class="item-container">
+    <div class="item-container-header">Water Resist</div>
+    <div class="item-container-content">
+
+     <label class="item">
+      Box Border
+      <input type="text" class="item-color item-color-normal" name="d3color" value="#ffffff">
+    </label>
+     <label class="item">
+      Box Fill
+      <input type="text" class="item-color item-color-normal" name="d4color" value="#000000">
+    </label>
+    <label class="item">
+      WR Letters
+      <input type="text" class="item-color item-color-normal" name="d5color" value="#ffffff">
+    </label>
+    <label class="item">
+      Water Resist Text
+      <input type="text" class="item-color item-color-normal" name="d6color" value="#ffffff">
+    </label>
+
+  </div>
+</div>
+
+<div class="item-container">
+    <div class="item-container-header">Buttons</div>
+    <div class="item-container-content">
+
+     <label class="item">
+      Button Labels
+      <input type="text" class="item-color item-color-normal" name="d7color" value="#ffffff">
+    </label>
+     <label class="item">
+      Button Arrows
+      <input type="text" class="item-color item-color-normal" name="d8color" value="#ffffff">
+    </label>
+ 
+
+  </div>
+</div>
+
+<div class="item-container">
+    <div class="item-container-header">Battery</div>
+    <div class="item-container-content">
+
+     <label class="item">
+      Battery
+      <input type="text" class="item-color item-color-normal" name="bi1color" value="#000000">
+    </label>
+     <label class="item">
+      Battery Warning
+      <input type="text" class="item-color item-color-normal" name="bi2color" value="#000000">
+    </label>
+     <label class="item">
+      Battery Critical
+      <input type="text" class="item-color item-color-normal" name="bi3color" value="#000000">
+    </label>
+     <label class="item">
+      Battery Charging
+      <input type="text" class="item-color item-color-normal" name="bi4color" value="#000000">
+    </label>
+ 
+
+  </div>
+</div>
+
+
+
+<div class="item-container">
+    <div class="item-container-header">Bluetooth</div>
+    <div class="item-container-content">
+
+     <label class="item">
+      Circle Connected
+      <input type="text" class="item-color item-color-normal" name="bl1color" value="#ffffff">
+    </label>
+     <label class="item">
+      Icon Connected
+      <input type="text" class="item-color item-color-normal" name="bl2color" value="#000000">
+    </label>
+     <label class="item">
+      Circle Disconnected
+      <input type="text" class="item-color item-color-normal" name="bl3color" value="#ffffff">
+    </label>
+     <label class="item">
+      Icon Disconnected
+      <input type="text" class="item-color item-color-normal" name="bl4color" value="#ffffff">
+    </label>
+ 
+
+  </div>
+</div>
+
+
+
+
+<div class="item-container">
+<div class="button-container">
+<input type="button" class="item-button" value="Save">
+</div>
+</div>
+</form>
+
+
+
+<script src="dist/js/slate.js"></script>
+<script src="js/jquery-2.1.4.min.js"></script>
+<script src="js/gcolor.js"></script>
+
+<script>
+
+
+        $.get( "http://mirz.com/91dubv3/themes.json",{ "_": $.now() }, function( data ) {
+          var sel = $("#presets");
+          sel.empty();
+          sel.append('<option></option>');
+          for (var i=0; i<data.length; i++) {
+            sel.append('<option value="' + encodeURIComponent(JSON.stringify(data[i])) + '">' + data[i].theme[0].name + '</option>');
+          }
+        });  
+
+
+
+
+
+
+
+var img = new Image();
+img.src = "images/91dub.png";
+img.onload = function() {
+        draw();
+      };
+
+
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+    return componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+function hexTorgb(c) {
+    return parseint(c, 16);
+}
+
+
+function draw(){
+
+//    alert("Drawing");
+
+    // Array to hold original colors
+    var oColor = [	
+'000000', 
+'ffaa00', 
+'ffffff', 
+'aaaaff', 
+'aaaaaa', 
+'0000ff', 
+'aa00aa',
+'ff0000',
+'550000',
+'0055aa',
+'00aaff',
+'aaaa00',
+'aaffaa',
+'ff00ff',
+'00ff55',
+'ff5555',
+'ffff00',
+'0000aa',
+'',
+'',
+'',
+'aa55ff',
+'aaffff',
+'',
+''
+];
+
+    // Get a handle to the realcolour checkbox
+    var realcolour = document.getElementById("realcolour");
+
+    // Get the colours from our Spectrum pickers
+    var cColor = [];
+    var i=0;
+
+    $('.item-color').map(function () {
+ 
+        if (realcolour.checked){ 
+            cColor[i] = this.value.replace('#','');
+            cColor[i] = cColor[i].replace('0x', '');
+            cColor[i] = GColor.toSunnyHex(cColor[i]);
+            i++;
+        }
+        else
+        {
+            cColor[i] = this.value.replace('#','');
+            cColor[i] = cColor[i].replace('0x', '');
+            i++
+        }
+    });
+
+//    for(var i=0; i<cColor.length; i++) {
+//        alert(i +": " + cColor[i]);
+//    }
+        
+
+    // Get a handle to the Canvas and Context
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    
+
+    // Draw the original image
+    ctx.drawImage(img, 0, 0);
+
+
+    // Read the pixel data from the original image    
+    var imgData = ctx.getImageData(0,0,canvas.width, canvas.height);
+    var data = imgData.data;
+
+
+    // Loop through the pixel data
+    for(var i=0; i<data.length; i+=4) {
+
+	// Get the individual RGB values
+        var red = data[i];
+	var green = data[i+1];
+	var blue = data[i+2];
+	var alpha = data[i+3];
+
+        // Convert to hex
+        var hexcol = rgbToHex(red, green, blue);
+
+//alert(hexcol);
+        
+	for (var j=0; j<oColor.length; j++) {
+//alert("J: " + j);
+            if (hexcol == oColor[j]) {
+
+		data[i]   = parseInt(cColor[j].substring(0,2),16);
+	        data[i+1] = parseInt(cColor[j].substring(2,4),16);
+	        data[i+2] = parseInt(cColor[j].substring(4,6),16);
+                break;
+	    }
+
+        }
+
+    }
+
+    // Push the data back to the canvas
+    ctx.putImageData(imgData, 0, 0);
+
+
+}
+
+
+
+
+
+// Make color pickers force a re-draw
+$('input:text').change(function() {draw();});
+
+
+
+
+// Get query variables
+function getQueryParam(variable, defaultValue) {
+  // Find all URL parameters
+  var query = location.search.substring(1);
+  var vars = query.split('&');
+  for (var i = 0; i < vars.length; i++) {
+    var pair = vars[i].split('=');
+
+    // If the query variable parameter is found, decode it to use and return it for use
+    if (pair[0] === variable) {
+      return decodeURIComponent(pair[1]);
+    }
+  }
+  return defaultValue || false;
+} 
+ 
+
+
+$(".item-button").click(function(e) {
+    var btn = $(this).val();
+    if(btn == 'Save') {
+
+	var config = {};
+
+	$('input:checkbox').map(function () {
+  			config[this.name] = (this.checked ? 1:0);
+			});
+		
+	$('.tab-button.active').map(function () {
+  			config[this.name] = $(this).data("info");
+			});
+
+	alert(JSON.stringify(config));
+
+    }
+
+  });
+
+</script>
+</body>
+</html>
