@@ -312,12 +312,31 @@ function getThemes() {
             sel.append('<option value="' + encodeURIComponent(JSON.stringify(data[i])) + '">' + data[i].theme[0].name + '</option>');
           }
         });  
-    }
+    }
+
+
+$('#presets').on('change', function() {
+
+      // Disable on change for pickers to prevent re-drawing until all colours are updated
+      $('input:text').change(function() {});
+
+      var newsettings = JSON.parse(decodeURIComponent(this.value));
+      $.each(newsettings.theme[0], function(key,value){
+          $('#' + key).val(value);
+      });
+
+      // Enable on change for pickers again
+      $('input:text').change(function() {draw();});
+
+      draw();
+    });
+
 
 
 $().ready(function () {
       getThemes();
-      });
+      });
+
 
 
 var img = new Image();
