@@ -308,7 +308,7 @@ function getThemes() {
         $.get( "themes.json",{ "_": $.now() }, function( data ) {
           var sel = $("#presets");
           sel.empty();
-          sel.append('<option></option>');
+          //sel.append('<option></option>');
           for (var i=0; i<data.length; i++) {
             sel.append('<option value="' + encodeURIComponent(JSON.stringify(data[i])) + '">' + data[i].theme[0].name + '</option>');
           }
