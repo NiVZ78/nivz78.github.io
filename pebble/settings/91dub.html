@@ -328,7 +328,7 @@ $('#presets').on('change', function() {
       var newsettings = JSON.parse(decodeURIComponent(this.value));
       $.each(newsettings.theme[0], function(key,value){
           $('#' + key).val(value);
-          $('#' + key).css('background-color', value.replace(/^0x/, '#'));
+          $('#' + key).parent().find('span').css('background', value.replace(/^0x/, '#'));
       });
 
       // Enable on change for pickers again
