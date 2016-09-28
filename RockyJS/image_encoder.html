@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<script>
+
+  var mappingChar = {
+    '000000': '0',
+    '000055': '1',
+    '0000aa': '2',
+    '0000ff': '3',
+    '005500': '4',
+    '005555': '5',
+    '0055aa': '6',
+    '0055ff': '7',
+    '00aa00': '8',
+    '00aa55': '9',
+    '00aaaa': 'a',
+    '00aaff': 'b',
+    '00ff00': 'c',
+    '00ff55': 'd',
+    '00ffaa': 'e',
+    '00ffff': 'f',
+    '550000': 'g',
+    '550055': 'h',
+    '5500aa': 'i',
+    '5500ff': 'j',
+    '555500': 'k',
+    '555555': 'l',
+    '5555aa': 'm',
+    '5555ff': 'n',
+    '55aa00': 'o',
+    '55aa55': 'p',
+    '55aaaa': 'q',
+    '55aaff': 'r',
+    '55ff00': 's',
+    '55ff55': 't',
+    '55ffaa': 'u',
+    '55ffff': 'v',
+    'aa0000': 'w',
+    'aa0055': 'x',
+    'aa00aa': 'y',
+    'aa00ff': 'z',
+    'aa5500': 'A',
+    'aa5555': 'B',
+    'aa55aa': 'C',
+    'aa55ff': 'D',
+    'aaaa00': 'E',
+    'aaaa55': 'F',
+    'aaaaaa': 'G',
+    'ffffff': 'H',
+    'aaaaff': 'I',
+    'aaff00': 'J',
+    'aaff55': 'K',
+    'aaffaa': 'L',
+    'aaffff': 'M',
+    'ff0000': 'N',
+    'ff0055': 'O',
+    'ff00aa': 'P',
+    'ff00ff': 'Q',
+    'ff5500': 'R',
+    'ff5555': 'S',
+    'ff55aa': 'T',
+    'ff55ff': 'U',
+    'ffaa00': 'V',
+    'ffaa55': 'W',
+    'ffaaaa': 'X',
+    'ffaaff': 'Y',
+    'ffff00': 'Z',
+    'ffff55': '@',
+    'ffffaa': '#'
+  };
+
+var canvas = document.createElement("canvas");
+canvas.id = "canvas";
+canvas.width = 144;
+canvas.height = 168;
+document.body.appendChild(canvas);
+
+
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+    return componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+
+function draw() {
+    //console.log(ev);
+    var ctx = document.getElementById('canvas').getContext('2d'),
+        img = new Image(),
+        f = document.getElementById("uploadimage").files[0],
+        url = window.URL || window.webkitURL,
+        src = url.createObjectURL(f);
+
+    img.src = src;
+    img.onload = function() {
+
+	canvas.width = img.width;
+	canvas.height = img.height;
+
+        ctx.drawImage(img, 0, 0);
+        url.revokeObjectURL(src);
+
+	// Read the pixel data from the original image    
+        var imgData = ctx.getImageData(0,0,canvas.width, canvas.height);
+        var data = imgData.data;
+
+        var output = "";
+
+        // Loop through the pixel data
+        for(var i=0; i<data.length; i+=4) {
+
+    	    // Get the individual RGB values
+            var red = data[i];
+  	    var green = data[i+1];
+	    var blue = data[i+2];
+	    var alpha = data[i+3];
+
+            // Convert to hex
+            var hexcol = rgbToHex(red, green, blue);
+            //console.log(mappingChar[hexcol]);
+	    
+            output += mappingChar[hexcol];
+
+        }
+
+      document.getElementById("output").innerHTML = output;
+
+    }
+}
+
+
+</script>
+
+
+
+<br/>
+<input type='file' name='img' size='65' id='uploadimage' />
+<button onclick = "draw()">Encode</button>
+<div style="width:100%; word-wrap: break-word;">
+<p id="output"></p>
+</div>
+
+
+</body>
+</html>
