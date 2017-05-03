@@ -1,0 +1,70 @@
+First, enable WSL:
+- In the control panel, search for "Turn Windows features on or off"
+- Check "Windows Subsystem for Linux (Beta)"
+- PC will restart
+- Start Command Prompt as Admin, execute bash.exe (This will take a while, feel free to get a snack)
+- It will prompt you to create a username and password, do so. (Nothing will show up in the password box, but you are still typing)
+- Close command prompt, and now you can see "Bash on Unbuntu on Windows" in your recently added programs in the Start Menu
+
+(This is required to display emulators and configuration pages)
+Get VcXsrv for windows
+https://sourceforge.net/projects/vcxsrv/
+- By default, it will not start with windows, but you can do this by adding a shortcut to it in your startup folder
+- Your startup folder is located by going to %appdata% in the windows explorer, then Microsoft/Windows/Start Menu/Programs/Startup
+- Copy VcXsrv's executable from C:/Program Files/VcXsrv, and in the startup folder, right click > Paste Shortcut
+
+(Pebble needs a few libraries and pre-requisites the WSL doesn't start with)
+- Run bash
+| "sudo apt-get install libsdl1.2debian libfdt1 libpixman-1-0 libfreetype6-dev python-pip python2.7-dev" (This will take a while, get a drink after that snack made you thirsty)
+| "sudo apt-get install firefox" (To display configuration pages, also takes a while, so throw away your trash from the snack)
+
+Install VirtualEnv
+| "sudo pip install virtualenv"
+
+Install NPM
+| "sudo npm cache clean -f" (Ignore sarcastic remarks made by npm)
+| "sudo npm -g install npm" (Shouldn't take long at all)
+
+Install Node (For JS compiling)
+| "curl -sL https://deb.nodesource.com/setup_4.x | sudo -e bash -"
+| "apt-get install -y nodejs"
+
+Update Node
+| "sudo npm cache clean -f"
+| "sudo npm install -g n" (Very fast)
+| "sudo n stable" (About as fast as an angry turtle - Not slow, but not remarkable either)
+
+Finally, time to install the pebble SDK
+- To keep your wsl environment organized, I'd suggest creating a downloads folder. 
+| "mkdir downloads"
+| "cd downloads"
+- Time to download!
+| "wget https://s3.amazonaws.com/assets.getpebble.com/pebble-tool/pebble-sdk-4.5-linux64.tar.bz2" (Change link based on sdk version)
+- Unzip into a folder for pebble tools
+| "cd ../"
+| "mkdir pebble-dev"
+| "cd pebble-dev"
+| "tar -jxf ~/downloads/pebble-sdk-4.5-linux64.tar.bz2" (Change url based on sdk version)
+- You now have a folder inside of "pebble-dev" with the name "pebble-sdk-4.5-linux64"
+- Now we need to setup all the requirements with virtaulenv
+| "cd ~/pebble-dev/pebble-sdk-4.5-linux64/"
+| "virtualenv --no-site-packages .env"
+| "source .env/bin/activate"
+| "pip install -r requirements.txt" (It'll freeze at one point, but eventually it'll work itself out)
+| "deactivate"
+
+- Almost done here! Now we need to make sure `pebble` commands work. We can do this by changing the path that bash uses to find executables. To keep us from having to do this every time bash launches, we can edit a file called `.bashrc`, which is located in the home directory associated with your account.
+| "cd ~/"
+| "vim .bashrc" (Vim. Scary. Move the cursor down to the bottom of the file, and press o to insert a blank new line)
+- Now you're able to type freely. Add the following lines to the bottom.
+| export DISPLAY=:0
+| export PATH=~/pebble-dev/pebble-sdk-4.5-linux64/bin:$PATH
+- Now for the tricky part. Exiting VIM. There are plenty of these jokes online, so I'm not restating them. Press ESC to exit INSERT mode. Next, type ":wq" and hit enter.
+- Go ahead and close bash and open it back up again. You can make sure everything is OK and working by typing "pebble"
+- For our final step, we need to install the latest version of the Pebble SDK. 
+| "pebble sdk install latest"
+
+And you're done! At this point you can follow any pebble guide, using the Pebble SDK option instead of Cloudpebble. 
+However, there's one issue. If you're making pebble projects in your Linux folders, you cannot edit them except using a text editor that's already in the linux subsystem, i.e. vim or nano. Instead, if you put them in a windows folder, such as in your documents folder, you can use VSCode or Notepad++ or any windows program to edit the files. To access a letter drive, such as the C drive, you must type
+| "cd /mnt/[drive letter]"
+From there, you can access the entire windows filesystem, and do whatever you like wherever. 
