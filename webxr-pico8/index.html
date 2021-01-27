@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-1752824-17"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			gtag('config', 'UA-1752824-17');
+		</script>
+		<title>pico8 webxr</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link type="text/css" rel="stylesheet" href="assets/style.css">
+		<link type="text/css" rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	</head>
+	<body>
+		<header>
+			<span id="handedness">
+				Handedness:
+				<a href="#" id="lefthand" onclick="setHandedness(this, 'left')">Left</a>
+				<a href="#" id="righthand" onclick="setHandedness(this, 'right')">Right</a>
+			</span>
+			<span>&nbsp;</span>
+			<a href="https://github.com/fernandojsg/pico8-webxr" onclick="aclick(event)">What is this about?</a>
+			<a id="twitter" href="http://twitter.com/share?text=Play%20the%20%23pico8%20game%20%22balblalba%22%20in%20%23WebXR!&url=https://fernandojsg.github.io/pico8-webxr"  onclick="aclick(event)"><svg width="20" height="20" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M29 6.72442C28.1924 7.89722 27.2017 8.89697 26.0277 9.72368C26.0393 9.9454 26.0451 10.196 26.0451 10.4755C26.0451 12.0283 25.8132 13.5831 25.3495 15.1397C24.8857 16.6963 24.1773 18.1863 23.2243 19.6096C22.2712 21.0329 21.136 22.2938 19.8185 23.3923C18.5011 24.4909 16.9174 25.3668 15.0676 26.0201C13.2178 26.6734 11.2353 27 9.12006 27C5.81892 27 2.7789 26.1299 0 24.3897C0.493223 24.4433 0.966265 24.47 1.41913 24.47C4.17695 24.47 6.64014 23.6407 8.80868 21.982C7.52282 21.959 6.37124 21.5725 5.35394 20.8226C4.33663 20.0727 3.63655 19.1144 3.25368 17.9479C3.63212 18.0182 4.00562 18.0534 4.3742 18.0534C4.90474 18.0534 5.42678 17.9859 5.94032 17.8507C4.56807 17.5824 3.42968 16.9151 2.52513 15.8488C1.62062 14.7826 1.16836 13.5519 1.16836 12.1568V12.0849C2.01065 12.5402 2.90909 12.7824 3.86367 12.8115C3.05076 12.2824 2.40625 11.5924 1.93013 10.7415C1.45397 9.89069 1.2159 8.9699 1.2159 7.9792C1.2159 6.93434 1.48407 5.96138 2.0204 5.06032C3.51269 6.84829 5.32092 8.2773 7.44508 9.34733C9.56927 10.4174 11.8481 11.0117 14.2816 11.1302C14.1778 10.7078 14.1258 10.2671 14.1257 9.808C14.1257 8.20496 14.7067 6.8362 15.8687 5.70172C17.0308 4.56724 18.4328 4 20.0746 4C21.7936 4 23.2415 4.61112 24.4184 5.83335C25.763 5.57331 27.022 5.10297 28.1954 4.42233C27.7433 5.81137 26.8722 6.88292 25.5821 7.63699C26.7678 7.49942 27.9071 7.19523 29 6.72442H29Z" fill="black"/></svg>
+			</a>
+			<br/>
+			<br/>
+			<span>Cart:<a id="cart-info" href="">none</a></span>
+		</header>
+		<div class="footer" style="visibility: hidden">
+			<a href="#" class="button" onclick="event.stopPropagation(); showCartsMenu()">Show carts menu</a>
+		</div>
+		<div class="container">
+			<div class="select">
+				<select id="carts">
+				</select>
+				<div class="select__arrow"></div>
+			</div>
+			<a href="#" class="button" onclick="loadCart()">Load cart</a>
+		</div>
+		<script>
+
+			function showCartsMenu(event) {
+				document.querySelector(".footer").style.visibility = "hidden";
+				document.querySelector(".container").style.visibility = "visible";
+				return false;
+			}
+
+			function setHandedness(link, hand) {
+				var currentURL = new URL(window.location);
+				currentURL.searchParams.set('handedness', hand);
+				link.href = currentURL.href;
+			}
+		</script>
+		<script type="module">
+
+			const chartInfo = {
+				celeste: {
+					"title": "Celeste",
+					"author": "noel",
+					"link": "https://www.lexaloffle.com/bbs/?tid=2145"
+				},
+				deep: {
+					"title": "The Merciless Deep",
+					"author" : "benjamin_soule",
+					"link": "https://www.lexaloffle.com/bbs/?tid=36914"
+				},
+				desert_drift: {
+					"title": "Desert drift",
+					"author" : "johanp",
+					"link": "https://www.lexaloffle.com/bbs/?pid=55232"
+				},
+				katamari: {
+					"title": "Katamari",
+					"author" : "p01",
+					"link": "https://www.lexaloffle.com/bbs/?uid=28958"
+				},
+				polarpanic: {
+					"title": "Polar panic",
+					"author" : "johanp",
+					"link": "https://www.lexaloffle.com/bbs/?tid=36118"
+				},
+				x_wing: {
+					"title": "X-Wing Pico Squadron",
+					"author" : "xavier",
+					"link": "https://www.lexaloffle.com/bbs/?tid=28996"
+				},
+				x_zero: {
+					"title": "X-Zero",
+					"author" : "paranoidcactus",
+					"link": "https://www.lexaloffle.com/bbs/?tid=36053"
+				},
+				plat: {
+					"title": "Tomb of G'Nir",
+					"author" : "paranoidcactus",
+					"link": "https://www.lexaloffle.com/bbs/?pid=52574"
+				},
+				tennis: {
+					"title": "Pico Tennis",
+					"author": "paranoidcactus",
+					"link": "https://www.lexaloffle.com/bbs/?tid=31450"
+				}
+			};
+
+			let cartsEl = document.getElementById("carts");
+			const urlObject = new URL(window.location);
+			let selected = urlObject.searchParams.get("cart");
+
+			for (let cartName in chartInfo) {
+				let option = document.createElement("option");
+				option.setAttribute("value", cartName);
+				if (selected === cartName) {
+					option.setAttribute("selected", "selected");
+				}
+
+				let info = chartInfo[cartName];
+				option.innerText = `${info.title}`;
+				cartsEl.appendChild(option);
+			}
+
+      import * as THREE from 'https://unpkg.com/three/build/three.module.js';
+			import { PointerLockControls } from 'https://unpkg.com/three/examples/jsm/controls/PointerLockControls.js';
+      import { VRButton } from 'https://unpkg.com/three/examples/jsm/webxr/VRButton.js';
+			import { GLTFLoader } from 'https://unpkg.com/three/examples/jsm/loaders/GLTFLoader.js';
+			import { XRControllerModelFactory } from 'https://unpkg.com/three/examples/jsm/webxr/XRControllerModelFactory.js';
+			import {
+				Constants as MotionControllerConstants
+			} from 'https://unpkg.com/three/examples/jsm/libs/motion-controllers.module.js';
+
+			var camera, scene, renderer, mesh, material, controls;
+			var controllers = {
+				left: null,
+				right: null
+			};
+
+			var stickHand = "left";
+			var buttonsHand = "right";
+			var picoIframe;
+			var materialLoaded = false;
+
+			var moveForward = false;
+			var moveBackward = false;
+			var moveLeft = false;
+			var moveRight = false;
+			var prevTime = performance.now();
+			var velocity = new THREE.Vector3();
+			var direction = new THREE.Vector3();
+
+			init();
+			animate();
+
+
+			function loadCart() {
+				document.querySelector(".container").style.visibility = "hidden";
+				const cart = document.getElementById("carts").value;
+
+				let info = chartInfo[cart];
+				var link = document.getElementById("cart-info");
+				if (info) {
+					link.setAttribute("href", info.link);
+					link.innerText = info.title + " by " + info.author;
+					let twitter = `http://twitter.com/share?text=Play%20the%20%23pico8%20game%20%22${info.title}%20by%20${info.author}%22%20in%20%23WebXR!&url=https://fernandojsg.github.io/pico8-webxr`
+					document.getElementById("twitter").setAttribute("href", twitter);
+
+				} else {
+					link.setAttribute("href", "");
+					link.innerText = "unknown";
+				}
+
+				picoIframe.setAttribute("src", `carts/${cart}.html`);
+				document.querySelector("button").style.visibility = "visible";
+				controls.lock();
+				document.addEventListener("click", () => {
+					if (document.querySelector(".container").style.visibility === "hidden") {
+						controls.lock();
+					}
+				});
+				document.querySelector(".footer").style.visibility = "visible";
+			}
+
+			window.loadCart = loadCart;
+
+			function init() {
+				const urlObject = new URL(window.location);
+				const cart = urlObject.searchParams.get("cart") || "celeste";
+				const handedness = urlObject.searchParams.has('handedness') ? urlObject.searchParams.get('handedness') : "right";
+				if (handedness === "left") {
+					stickHand = "right";
+					buttonsHand  ="left";
+				}
+
+				document.getElementById(handedness + 'hand').classList.add('activehand');
+
+				scene = new THREE.Scene();
+				scene.background = new THREE.Color( 0x111111 );
+
+				scene.add( new THREE.HemisphereLight( 0x606060, 0x404040 ) );
+
+				var light = new THREE.DirectionalLight( 0xffffff );
+				light.position.set( 1, 1, 1 ).normalize();
+				scene.add( light );
+
+				// "TV"
+				let sizeB = 3.2;
+				let tv = new THREE.Mesh( new THREE.BoxBufferGeometry( sizeB, sizeB, 0.1 ), new THREE.MeshStandardMaterial( {
+					color: 0x222222
+				} ) );
+				tv.position.set( 2.5, 2.3, - 7.2 );
+				scene.add( tv );
+
+				var texture = new THREE.TextureLoader().load( 'assets/background.png' );
+				texture.encoding = THREE.sRGBEncoding;
+
+				// Render area for the game
+				material = new THREE.MeshBasicMaterial({
+					map: texture
+				});
+				let size = 3;
+				mesh = new THREE.Mesh( new THREE.PlaneBufferGeometry( size, size ), material );
+				mesh.position.set( 2.5, 2.3, - 7.11 );
+				scene.add( mesh );
+
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.outputEncoding = THREE.sRGBEncoding;
+				renderer.xr.enabled = true;
+				document.body.appendChild( renderer.domElement );
+
+				var controller1 = renderer.xr.getController( 0 );
+				var controller2 = renderer.xr.getController( 1 );
+
+				camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.1, 2000 );
+				camera.position.set( 0, 1.65, 4 );
+
+				let cameraRig = new THREE.Group();
+				cameraRig.position.set( 2.5, 0, - 2 );
+				scene.add( cameraRig );
+				cameraRig.add( camera );
+				cameraRig.add( controller1 );
+				cameraRig.add( controller2 );
+
+				controls = new PointerLockControls( cameraRig, document.body );
+
+				// The XRControllerModelFactory will automatically fetch controller models
+				// that match what the user is holding as closely as possible. The models
+				// should be attached to the object returned from getControllerGrip in
+				// order to match the orientation of the held device.
+
+				var controllerModelFactory = new XRControllerModelFactory();
+
+				var controllerGrip1 = renderer.xr.getControllerGrip( 0 );
+				controllerGrip1.addEventListener( 'connected', ( event ) => {
+
+					controllers[ event.data.handedness ] = controllerGrip1;
+			
+				} );
+				controllerGrip1.add( controllerModelFactory.createControllerModel( controllerGrip1 ) );
+
+				var controllerGrip2 = renderer.xr.getControllerGrip( 1 );
+				controllerGrip2.add( controllerModelFactory.createControllerModel( controllerGrip2 ) );
+				controllerGrip2.addEventListener( 'connected', ( event ) => {
+
+					controllers[ event.data.handedness ] = controllerGrip2;
+
+				} );
+
+				cameraRig.add( controllerGrip1 );
+				cameraRig.add( controllerGrip2 );
+
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+				document.body.appendChild( VRButton.createButton( renderer ) );
+
+				if (!urlObject.searchParams.has("noroom")) {
+					var loader = new GLTFLoader().setPath( 'assets/' );
+					loader.load( 'hall_empty.glb', function ( gltf ) {
+
+						scene.add( gltf.scene );
+
+					} );
+				}
+
+				// Redirect all the key input to the iframe so you can play also with your keyboard
+				window.addEventListener( "keydown", ev => {
+					onKeyDown(ev);
+					picoIframe.contentWindow.document.dispatchEvent( new KeyboardEvent( "keydown", { "keyCode": ev.keyCode } ) );
+
+				} );
+
+				window.addEventListener( "keyup", ev => {
+					onKeyUp(ev);
+					picoIframe.contentWindow.document.dispatchEvent( new KeyboardEvent( "keyup", { "keyCode": ev.keyCode } ) );
+
+				} );
+
+				picoIframe = document.getElementById( "pico8" );
+				picoIframe.onload = () => {
+					setupGameCanvas();
+				}
+
+				var onKeyDown = function ( event ) {
+
+						switch ( event.keyCode ) {
+							case 87: // w
+								moveForward = true;
+								break;
+
+							case 65: // a
+								moveLeft = true;
+								break;
+
+							case 83: // s
+								moveBackward = true;
+								break;
+
+							case 68: // d
+								moveRight = true;
+								break;
+						}
+
+					};
+
+				var onKeyUp = function ( event ) {
+
+					switch ( event.keyCode ) {
+						case 87: // w
+							moveForward = false;
+							break;
+						case 65: // a
+							moveLeft = false;
+							break;
+						case 83: // s
+							moveBackward = false;
+							break;
+						case 68: // d
+							moveRight = false;
+							break;
+					}
+
+				};
+
+				// setupGameCanvas();
+			}
+
+			function setupGameCanvas() {
+				var canvas = document.getElementById( 'pico8' ).contentWindow.document.querySelector( 'canvas' );
+				if (canvas) {
+					material.map = new THREE.CanvasTexture( canvas );
+					var drawingContext = canvas.getContext( '2d' );
+
+					drawingContext.fillStyle = '#FFFFFF';
+					drawingContext.fillRect( 0, 0, 128, 128 );
+
+					material.map.encoding =THREE.sRGBEncoding;
+					material.map.minFilter = THREE.NearestFilter;
+					material.map.magFilter = THREE.NearestFilter;
+					material.map.needsUpdate = true;
+					materialLoaded = true;
+				} else {
+					console.log("NOOooooooooooo");
+				}
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			function animate() {
+
+				renderer.setAnimationLoop( render );
+
+			}
+
+			function getComponentValues( handedness, name ) {
+
+				let controller = controllers[ handedness ];
+				if (controller.children[ 0 ].motionController) {
+					let component = controller.children[ 0 ].motionController.components[ name ];
+					return component ? component.values : {};
+				}
+				return {};
+			}
+
+			let prevButtonPressed = {
+				x: false,
+				y: false,
+				up: false,
+				down: false,
+				left: false,
+				right: false
+			};
+
+			let keyCodes = {
+				x: 88,
+				y: 90,
+				up: 38,
+				down: 40,
+				left: 37,
+				right: 39
+			};
+
+			function processInput() {
+				let x = getComponentValues( buttonsHand, buttonsHand === "right" ? "a-button" : "x-button" ).state === MotionControllerConstants.ComponentState.PRESSED;
+				let y = getComponentValues( buttonsHand, buttonsHand === "right" ? "b-button" : "y-button" ).state === MotionControllerConstants.ComponentState.PRESSED;
+
+				let axisX = getComponentValues( stickHand, "xr-standard-thumbstick" ).xAxis;
+				let axisY = getComponentValues( stickHand, "xr-standard-thumbstick" ).yAxis;
+
+				let buttonPressed = {
+					x,
+					y,
+					left: axisX < - 0.5,
+					right: axisX > 0.5,
+					down: axisY > 0.5,
+					up: axisY < - 0.5
+				};
+
+				for (let button in buttonPressed) {
+					if (buttonPressed[button] && !prevButtonPressed[button]) {
+						picoIframe.contentWindow.document.dispatchEvent( new KeyboardEvent( "keydown", { "keyCode": keyCodes[button] } ) );
+					} else if (!buttonPressed[button] && prevButtonPressed[button]) {
+						picoIframe.contentWindow.document.dispatchEvent( new KeyboardEvent( "keyup", { "keyCode": keyCodes[button] } ) );
+					}
+					prevButtonPressed[button] = buttonPressed[button];
+				}
+			}
+
+			function processKeyboard() {
+				if ( controls.isLocked === true ) {
+					var time = performance.now();
+					var delta = ( time - prevTime ) / 1000;
+
+					velocity.x -= velocity.x * 10.0 * delta;
+					velocity.z -= velocity.z * 10.0 * delta;
+
+					direction.z = Number( moveForward ) - Number( moveBackward );
+					direction.x = Number( moveRight ) - Number( moveLeft );
+					direction.normalize(); // this ensures consistent movements in all directions
+
+					if ( moveForward || moveBackward ) velocity.z -= direction.z * 40.0 * delta;
+					if ( moveLeft || moveRight ) velocity.x -= direction.x * 40.0 * delta;
+
+					controls.moveRight( - velocity.x * delta );
+					controls.moveForward( - velocity.z * delta );
+
+					prevTime = time;
+
+				}
+
+			}
+
+			function render() {
+				if (materialLoaded) {
+					material.map.needsUpdate = true;
+				}
+
+				renderer.render( scene, camera );
+
+				if ( renderer.xr.isPresenting ) {
+					processInput();
+					let picoWindow = picoIframe.contentWindow;
+					picoWindow.Browser.mainLoop.runner();
+				} else {
+					processKeyboard();
+				}
+			}
+		</script>
+		<iframe
+			id="pico8"
+			src=""
+			width="0" height="0">
+		</iframe>
+	</body>
+</html>

@@ -1,0 +1,168 @@
+@font-face{
+  font-family: 'Zilla Slab';
+  src: url('https://code.cdn.mozilla.net/fonts/woff/ZillaSlab-SemiBold.woff');
+  src: url('https://code.cdn.mozilla.net/fonts/woff2/ZillaSlab-SemiBold.woff2') format('woff2'),
+       url('https://code.cdn.mozilla.net/fonts/woff/ZillaSlab-SemiBold.woff') format('woff'),
+       url('https://code.cdn.mozilla.net/fonts/otf/ZillaSlab(-SemiBold).otf') format('opentype'),
+       url('https://code.cdn.mozilla.net/fonts/ttf/ZillaSlab-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: 'Zilla Slab', sans-serif;
+}
+
+iframe {
+  position: absolute;
+  z-index: 0;
+}
+canvas {
+  position: absolute;
+  z-index: 1;
+}
+
+header {
+  position: absolute;
+  width: calc(100vw - 1rem);
+  margin-top: 1rem;
+  text-align: right;
+  z-index: 20;
+}
+
+header a {
+  text-decoration: none;
+  color: #000;
+  margin-left: 0.8rem;
+  vertical-align: top;
+}
+header a path{
+  fill: #000;
+}
+header a:hover {
+  color: #059;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+header a:hover path, #mrlogo:hover path.mrlogobg{
+  fill: #059;
+}
+#handedness a{
+  margin-left: 0.3rem;
+}
+.activehand {
+  background: #000;
+  color: #fff;
+  padding: 3px 12px;
+  border-radius: 5px;
+  pointer-events: none;
+}
+
+.container {
+  flex-direction: column;
+  position:absolute;
+  z-index: 10;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.button {
+  background: #000;
+  color: #fff;
+  height: 40px;
+  font-size: 2em;
+  padding: 3px 12px;
+  border-radius: 5px;
+  text-decoration: none;
+  border: 2px solid #fff;
+}
+
+.button:hover {
+  background: #fff;
+  color: #000;
+}
+
+button {
+  visibility: hidden;
+}
+
+
+
+
+/* Select box */
+.control {
+  display: block;
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+
+.select {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 15px;
+  width: 300px;
+}
+.select select {
+  font-family: 'Zilla Slab', sans-serif;
+  font-size: 1.5em;
+  display: inline-block;
+  width: 100%;
+  cursor: pointer;
+  padding: 10px 15px;
+  outline: 0;
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+  color: #000;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+.select select::-ms-expand {
+  display: none;
+}
+.select select:hover,
+.select select:focus {
+  color: #000;
+  background: #fff;
+}
+.select select:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.select__arrow {
+  position: absolute;
+  top: 22px;
+  right: 15px;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  border-style: solid;
+  border-width: 8px 5px 0 5px;
+  border-color: #7b7b7b transparent transparent transparent;
+}
+.select select:hover ~ .select__arrow,
+.select select:focus ~ .select__arrow {
+  border-top-color: #000;
+}
+.select select:disabled ~ .select__arrow {
+  border-top-color: #ccc;
+}
+
+.footer {
+  position: absolute;
+  bottom: 10px;
+  z-index: 99;
+}
+
+.footer > .button {
+  font-size: 1.5em;
+}
